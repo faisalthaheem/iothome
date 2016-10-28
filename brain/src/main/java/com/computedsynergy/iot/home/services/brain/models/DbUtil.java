@@ -1,6 +1,7 @@
 package com.computedsynergy.iot.home.services.brain.models;
 
-import java.io.FileReader;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import org.h2.tools.RunScript;
 import org.sql2o.Sql2o;
 
@@ -29,8 +30,8 @@ public class DbUtil {
         try {
             dbConnection = new Sql2o(DB_CONNECTION, DB_USER, DB_PASSWORD);
 
-            ClassLoader classLoader = DbUtil.class.getClassLoader();
-            RunScript.execute(dbConnection.getDataSource().getConnection(), new FileReader(classLoader.getResource("create-db.sql").getFile()));
+            
+            RunScript.execute(dbConnection.getDataSource().getConnection(), getDDLcontent());
             return dbConnection;
             
         } catch (Exception e) {
@@ -38,4 +39,11 @@ public class DbUtil {
         }
         return dbConnection;
     }
+     
+     private static Reader getDDLcontent(){
+         
+         ClassLoader classLoader = DbUtil.class.getClassLoader();
+         
+         return new InputStreamReader(classLoader.getResourceAsStream("create-db.sql"));
+     }
 }
