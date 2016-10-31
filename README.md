@@ -1,5 +1,7 @@
 # IoT Home - an IoT Platform tailored for the ESP 8266 family of devices
 
+Fancy big IoT platforms are cool but they come at a price and added complexity and as they are generic they do not focus on any one thing in particular. This project comes for free with simplicity and just one purpose in mind. Home Automation.
+
 The project aims to provide a central & intelligent control system for house automation which includes controling appliances, supporting scheduled events, reading sensor data and taking appropriate actions etc. The project is currently in nascent stages and I hope to spend some time maturing it for production use. It is currently in a state favorable for hobbyist use. Currently covered:
 
  * Standalone web services using apache spark support listing, adding and deleting scheduled jobs.
