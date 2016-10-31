@@ -1,4 +1,4 @@
-# IoT Home
+# IoT Home - an IoT Platform tailored for the ESP 8266 family of devices
 
 The project aims to provide a central & intelligent control system for house automation which includes controling appliances, supporting scheduled events, reading sensor data and taking appropriate actions etc. The project is currently in nascent stages and I hope to spend some time maturing it for production use. It is currently in a state favorable for hobbyist use. Currently covered:
 
