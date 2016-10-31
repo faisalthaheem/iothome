@@ -4,6 +4,8 @@ import com.computedsynergy.iot.home.services.brain.models.DbUtil;
 import com.computedsynergy.iot.home.services.brain.models.interfaces.ScheduledJobsModel;
 import com.computedsynergy.iot.home.services.brain.models.pojos.ScheduledJob;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.sql2o.Connection;
 
 
@@ -12,6 +14,9 @@ import org.sql2o.Connection;
  * @author Faisal Thaheem
  */
 public class ScheduledJobsModelImpl implements ScheduledJobsModel {
+    
+    
+    private Logger logger = Logger.getLogger(ScheduledJobsModelImpl.class.getName());
 
     @Override
     public int addScheduledJob(ScheduledJob job) {
@@ -35,7 +40,7 @@ public class ScheduledJobsModelImpl implements ScheduledJobsModel {
                 System.out.println("Record created successfully. " + insertedRecordId);
                 
             }catch(Exception ex){
-                System.out.println(ex.getMessage());
+                logger.log(Level.SEVERE, "addScheduledJob", ex);
             }
         }
         

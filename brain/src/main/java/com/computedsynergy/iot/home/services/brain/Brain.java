@@ -34,6 +34,7 @@ public class Brain {
     
     private static Brain myInstance = null;
     private static CommandLineOptions commandLineOptions = new CommandLineOptions();
+    private static Logger logger = Logger.getLogger(Brain.class.getName());
     
     private static Brain getInstance(){
         
@@ -49,11 +50,13 @@ public class Brain {
             scheduler  = StdSchedulerFactory.getDefaultScheduler();
             scheduler.start();
         } catch (SchedulerException ex) {
-            Logger.getLogger(Brain.class.getName()).log(Level.SEVERE, null, ex);
+            logger.log(Level.SEVERE, "Brain()", ex);
         }
     }
     
     private static void startSavedJobs(){
+        
+        logger.log(Level.INFO, "Begin starting saved jobs.");
         
         ScheduledJobsModelImpl dbJobs = new ScheduledJobsModelImpl();
         List<ScheduledJob> jobs = dbJobs.listJobs();
@@ -76,11 +79,14 @@ public class Brain {
             try {            
                 getInstance().scheduler.scheduleJob(jobDetail, trigger);
                 
+                logger.log(Level.INFO, "Started job: " + job.getJobName());
+                
             } catch (SchedulerException ex) {
-                Logger.getLogger(Brain.class.getName()).log(Level.SEVERE, null, ex);
-                System.out.println(ex.getMessage());
+                logger.log(Level.SEVERE, "startSavedJobs", ex);
             }
         }
+        
+        logger.log(Level.INFO, "End starting saved jobs.");
     }
     
             
@@ -147,7 +153,8 @@ public class Brain {
                     
                     getInstance().scheduler.scheduleJob(jobDetail, trigger);
                 }catch(Exception ex){
-                    System.out.println(ex.getMessage());
+                    logger.log(Level.SEVERE, "main.addJob", ex);
+                    
                     response.setError("true");
                     response.setMessage(ex.getMessage());
                 }

@@ -4,10 +4,12 @@ import com.computedsynergy.iot.home.services.brain.Brain;
 import com.computedsynergy.iot.home.services.brain.models.impl.ScheduledJobsModelImpl;
 import com.computedsynergy.iot.home.services.brain.models.pojos.ScheduledJob;
 import com.computedsynergy.iot.home.services.brain.pojo.CommandLineOptions;
+
 import org.quartz.Job;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
-import org.apache.log4j.Logger;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
@@ -19,19 +21,21 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  */
 public class JobRunner  implements Job{
 
-    final static Logger logger = Logger.getLogger(JobRunner.class);
+    final static Logger logger = Logger.getLogger(JobRunner.class.getName());
     final static MemoryPersistence persistence = new MemoryPersistence();
     
     @Override
     public void execute(JobExecutionContext jec) throws JobExecutionException {
+        
+        logger.log(Level.INFO, "Start executing job.");
         
         int myJobId = (int) jec.getJobDetail().getJobDataMap().get("id");
         
         ScheduledJobsModelImpl dbJobs = new ScheduledJobsModelImpl();
         
         ScheduledJob job = dbJobs.getJob(myJobId);
-        System.out.println("job run [" + myJobId + "] name: " + job.getJobName());
-        
+        logger.log(Level.INFO, "job identifier : [" + myJobId + "]");
+
         try{
             CommandLineOptions options = Brain.getCommandLineOptions();
             
@@ -39,9 +43,9 @@ public class JobRunner  implements Job{
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setCleanSession(true);
             
-            System.out.println("Connecting to broker: " + options.getMqBroker());
+            logger.log(Level.INFO, "Connecting to broker: " + options.getMqBroker());
             mqttClient.connect(connOpts);
-            System.out.println("Connected");
+            logger.log(Level.INFO, "Connected...");
             
             try{
 
@@ -49,17 +53,19 @@ public class JobRunner  implements Job{
                 MqttMessage message = new MqttMessage(payload.getBytes());
                 message.setQos(options.getQos());
                 mqttClient.publish(job.getTopic(), message);
-                System.out.println("Message published");
+                logger.log(Level.INFO, "Message ["+ message +"] published to topic ["+ job.getTopic() +"]");
 
             }catch(Exception ex){
-                logger.error(ex);
+                logger.log(Level.SEVERE, "execute", ex);
             }
             
             mqttClient.disconnect();
-            System.out.println("Disconnected");
+            logger.log(Level.INFO, "Disconnected from broker");
+            
+            logger.log(Level.INFO, "End executing job.");
             
         }catch(Exception ex){
-            logger.error(ex);
+            logger.log(Level.SEVERE, "execute", ex);
         }
     }
     

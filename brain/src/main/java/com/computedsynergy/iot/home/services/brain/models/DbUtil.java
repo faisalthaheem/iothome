@@ -2,6 +2,9 @@ package com.computedsynergy.iot.home.services.brain.models;
 
 import java.io.InputStreamReader;
 import java.io.Reader;
+import java.util.logging.Level;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.h2.tools.RunScript;
 import org.sql2o.Sql2o;
 
@@ -19,13 +22,16 @@ public class DbUtil {
     private static final String DB_USER = "";
     private static final String DB_PASSWORD = "";
 
+    private static Logger logger = Logger.getLogger(DbUtil.class.getName());
     
      public static Sql2o getDBConnection() {
         Sql2o dbConnection = null;
         try {
             Class.forName(DB_DRIVER);
-        } catch (ClassNotFoundException e) {
-            System.out.println(e.getMessage());
+            
+        } catch (ClassNotFoundException ex) {
+            
+            logger.log(Level.SEVERE, "getDBConnection", ex);
         }
         try {
             dbConnection = new Sql2o(DB_CONNECTION, DB_USER, DB_PASSWORD);
@@ -34,8 +40,8 @@ public class DbUtil {
             RunScript.execute(dbConnection.getDataSource().getConnection(), getDDLcontent());
             return dbConnection;
             
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
+        } catch (Exception ex) {
+            logger.log(Level.SEVERE, "getDBConnection", ex);
         }
         return dbConnection;
     }
