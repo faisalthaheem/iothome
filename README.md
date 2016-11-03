@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/faisalthaheem/iothome.png?branch=master)](https://travis-ci.org/faisalthaheem/iothome)
+
 # IoT Home - an IoT Platform tailored for the ESP 8266 family of devices
 
 Fancy big IoT platforms are cool but they come at a price and added complexity and as they are generic they do not focus on any one thing in particular. This project comes for free with simplicity and just one purpose in mind. Home Automation.
