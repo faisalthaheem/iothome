@@ -20,6 +20,9 @@ import org.quartz.SchedulerException;
 import org.quartz.Trigger;
 import org.quartz.TriggerBuilder;
 import org.quartz.impl.StdSchedulerFactory;
+import spark.Filter;
+import spark.Request;
+import spark.Response;
 import static spark.Spark.*;
 
 
@@ -54,34 +57,50 @@ public class Brain {
         }
     }
     
+    private static void enableCORS(final String origin, final String methods, final String headers) {
+        before(new Filter() {
+            @Override
+            public void handle(Request request, Response response) throws Exception {
+                response.header("Access-Control-Allow-Origin", origin);
+                response.header("Access-Control-Request-Method", methods);
+                response.header("Access-Control-Allow-Headers", headers);
+            }
+
+        });
+    }
+
+    
     private static void startSavedJobs(){
         
         logger.log(Level.INFO, "Begin starting saved jobs.");
+        
+        enableCORS("*", "*", "*");
         
         ScheduledJobsModelImpl dbJobs = new ScheduledJobsModelImpl();
         List<ScheduledJob> jobs = dbJobs.listJobs();
         
         for(ScheduledJob job : jobs){
             
-            JobDetail jobDetail = JobBuilder.newJob(JobRunner.class)
-                    .withIdentity(job.getJobidentifier(), "group1").build();
+            try {
+                JobDetail jobDetail = JobBuilder.newJob(JobRunner.class)
+                        .withIdentity(job.getJobidentifier(), "group1").build();
 
-            jobDetail.getJobDataMap().put("id", job.getId());
+                jobDetail.getJobDataMap().put("id", job.getId());
 
-            Trigger trigger = TriggerBuilder
-                        .newTrigger()
-                        .withIdentity(job.getJobidentifier()+ "Trigger", "group1")
-                        .withSchedule(
-                                CronScheduleBuilder.cronSchedule(job.getCronSchedule())
-                        )
-                        .build();
+                Trigger trigger = TriggerBuilder
+                            .newTrigger()
+                            .withIdentity(job.getJobidentifier()+ "Trigger", "group1")
+                            .withSchedule(
+                                    CronScheduleBuilder.cronSchedule(job.getCronSchedule())
+                            )
+                            .build();
 
-            try {            
+            
                 getInstance().scheduler.scheduleJob(jobDetail, trigger);
                 
                 logger.log(Level.INFO, "Started job: " + job.getJobName());
                 
-            } catch (SchedulerException ex) {
+            } catch (Exception ex) {
                 logger.log(Level.SEVERE, "startSavedJobs", ex);
             }
         }
@@ -160,6 +179,7 @@ public class Brain {
                 }
             }else{
                 response.setError("true");
+                response.setMessage("DB Error");
             }
         
             return response;
