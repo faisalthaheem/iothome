@@ -1,0 +1,263 @@
+h3disp -m 480p
+init 6
+ls
+ls
+cd ~
+ls
+mv wpa_supplicant.conf  > /etc/
+mv wpa_supplicant.conf  > /etc
+mv wpa_supplicant.conf  > /etc/wpa_supplicant.conf
+mv wpa_supplicant.conf  /etc/wpa_supplicant.conf
+cd /etc
+;s
+cat wpa_supplicant
+cat wpa_supplicant.conf 
+nano wpa_supplicant
+nano wpa_supplicant.conf 
+ls /var/run
+cd networks
+cd network
+ls
+nano interfaces
+init 6
+apt update
+apt instal mosquitto
+apt install mosquitto
+netstat
+netstat -an
+apt install default-jre
+java -version
+date
+cd /etc/default
+ls
+cat rcS
+nano rcS
+tzselect
+nano rcS
+set timezone Asia/Karachi
+timedatectl
+set timezone Asia/Karachi
+timedatectl
+set-timezone Asia/Karachi
+dpkg-reconfigure tzdata
+date
+dpkg-reconfigure tzdata
+date
+ll
+ls
+cat rcS
+init 6
+apt install htop
+htop
+java -version
+java
+apt-install git
+apt install git
+apt install default-jdk
+java
+javac
+apt update
+apt install default-jre
+apt update
+pakket
+Pakket
+apt-spy
+apt spy
+apt mirror
+cd /etc
+cd apt
+ls
+nano sources.list
+cat sources.list
+nano sources.list
+apt update
+service mosquitto status
+netstat -nl
+apt install ufw
+ufw status
+ufw disable
+ls
+netstat -nl
+ls
+cd /etc/mosquitto/
+ls
+cd conf.d
+ls
+cat my.conf
+nano my.conf
+service mosquitto restart
+service mosquitto stop
+service mosquitto start
+netstat -nl
+cat /var/log/mosquitto/mosquitto.log 
+apt install docker
+apt remove mosquitto
+docker run toke/mosquitto
+docker
+apt upgrade
+ls
+cat /etc/apt
+ls
+cd /etc
+ls
+cd apt
+ls
+wget http://repo.mosquitto.org/debian/mosquitto-repo.gpg.key
+sudo apt-key add mosquitto-repo.gpg.key
+cd sources.list.d/
+sudo wget http://repo.mosquitto.org/debian/mosquitto-jessie.list
+apt-get update
+apt-cache search mosquitto
+apt install mosquitto
+netstat -nl
+netstat -anl
+service mosquitto start
+netstat -anl
+ls
+cat /var/log/mosquitto/mosquitto.log 
+rm /var/log/mosquitto/mosquitto.log 
+service mosquitto restart
+cat /var/log/mosquitto/mosquitto.log 
+cd /etc/mosquitto/
+ls
+cd conf.d
+ls
+cat my.conf 
+init 6
+ifconfig
+netstat -nl
+service mosquitto status
+service mosquitto stop
+service mosquitto status
+apt remove mosquitto
+ls
+cd /etc
+cd mosquitto/
+ls
+cd conf.d/
+ls
+cp my.conf ~/
+cd /
+apt purge mosquitto
+apt autoremove
+apt cache mosquitto
+apt cache-search mosquitto
+apt install mosquitto
+netstat -nl
+ifconfig
+service mosquitto status
+service mosquitto status -l
+clear
+service mosquitto status -l
+telnet localhost 1883
+mosquitto
+ls
+cd /etc/mosquitto/
+ls
+cat mosquitto.conf 
+mosquitto -c mosquitto.conf 
+ls
+cd conf.d
+ls
+nano my.conf 
+service mosquitto restart
+exit
+apt remove default-jre
+java
+java -version
+exit
+mkdir /opt/oracle-jdk/
+tar -zxf jdk-8u111-linux-arm32-vfp-hflt.tar.gz -C /opt/oracle-jdk/
+htop
+service brain status
+service brain start
+nano brain 
+service brain start
+nano brain 
+service brain start
+ll
+ls -l
+ll
+ls
+ls -l
+ls
+ls -l
+chmod +x brain 
+./brain start
+service brain status
+htop
+./brain stop
+service brain start
+systemctl
+rm brain 
+ls
+cd ~
+ls
+cat my.conf 
+cat > sonarr.service << EOF
+[Unit]
+Description=Sonarr Daemon
+After=syslog.target network.target
+
+[Service]
+User=<service username>
+Group=<service group>
+
+Type=simple
+ExecStart=<path to mono> <path to NzbDrone.exe> -nobrowser
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
+EOF
+
+ls
+nan mv sonarr.service brain.service
+~ mv sonarr.service brain.service
+mv sonarr.service brain.service
+nano brain.service 
+ls
+systemctl status mosquitto
+cd /lib
+ls
+cd systemd/
+ls
+cd system
+ls
+cp ~/brain.service .
+ls -l
+pwd
+systemctl enable brain.service 
+systemctl start brain.service
+systemctl status brain.service
+systemctl status brain.service
+systemctl status brain.service
+/opt/oracle-jdk/jdk1.8.0_111/bin/java /home/faisal/brain-1.0-SNAPSHOT-jar-with-dependencies.jar --mqtt-broker tcp://localhost:1883
+/opt/oracle-jdk/jdk1.8.0_111/bin/java -jar /home/faisal/brain-1.0-SNAPSHOT-jar-with-dependencies.jar --mqtt-broker tcp://localhost:1883
+nano brain.service 
+nano ~/brain.service 
+ls
+ls log*
+ls /home/faisal
+rm /home/faisal/nohup.out 
+systemctl status brain.service
+systemctl start brain.service
+systemctl status brain.service
+systemctl daemon-reload brain.service
+systemctl daemon-reload
+systemctl status brain.service
+systemctl start brain.service
+systemctl status brain.service
+systemctl status brain.service
+systemctl status brain.service
+ls
+cd /var/log
+ls
+cat daemon.log 
+ls
+tail -f daemon.log 
+htop
+exit
+tail daemon.log

@@ -1,0 +1,16 @@
+[Unit]
+Description=Brain Daemon
+After=syslog.target network.target
+
+[Service]
+User=faisal
+Group=faisal
+
+Type=simple
+ExecStart=/opt/oracle-jdk/jdk1.8.0_111/bin/java -jar /home/faisal/brain-1.0-SNAPSHOT-jar-with-dependencies.jar --mqtt-broker tcp://localhost:1883
+TimeoutStopSec=20
+KillMode=process
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
