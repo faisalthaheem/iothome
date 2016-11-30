@@ -99,7 +99,7 @@ public class Brain {
             
                 getInstance().scheduler.scheduleJob(jobDetail, trigger);
                 
-                logger.log(Level.INFO, "Started job: " + job.getJobName());
+                logger.log(Level.INFO, "Started job: {0}", job.getJobName());
                 
             } catch (Exception ex) {
                 logger.log(Level.SEVERE, "startSavedJobs", ex);
@@ -175,6 +175,51 @@ public class Brain {
                     getInstance().scheduler.scheduleJob(jobDetail, trigger);
                 }catch(Exception ex){
                     logger.log(Level.SEVERE, "main.addJob", ex);
+                    
+                    response.setError("true");
+                    response.setMessage(ex.getMessage());
+                }
+            }else{
+                response.setError("true");
+                response.setMessage("DB Error");
+            }
+        
+            return response;
+            
+        }, new JsonTransformer());
+        
+        post("/updateJob", (req, res) -> {
+            
+            ResponsePojo response = new ResponsePojo();
+            
+            ScheduledJob job = new Gson().fromJson(new String(req.body().getBytes(), "UTF-8"), ScheduledJob.class);
+            
+            ScheduledJobsModelImpl dbJobs = new ScheduledJobsModelImpl();
+               
+            boolean jobUpdationSuccessful = dbJobs.updateSchedule(job);
+            if(jobUpdationSuccessful == true){
+                try{
+                    
+                    //remove the previous scheduled job
+                    JobKey key = new JobKey(job.getJobidentifier(),"group1");
+                    getInstance().scheduler.deleteJob(key);
+                    
+                    JobDetail jobDetail = JobBuilder.newJob(JobRunner.class)
+                            .withIdentity(job.getJobidentifier(), "group1").build();
+
+                    jobDetail.getJobDataMap().put("id", job.getId());
+
+                    Trigger trigger = TriggerBuilder
+                                .newTrigger()
+                                .withIdentity(job.getJobidentifier()+ "Trigger", "group1")
+                                .withSchedule(
+                                        CronScheduleBuilder.cronSchedule(job.getCronSchedule())
+                                )
+                                .build();
+                    
+                    getInstance().scheduler.scheduleJob(jobDetail, trigger);
+                }catch(Exception ex){
+                    logger.log(Level.SEVERE, "updateJob", ex);
                     
                     response.setError("true");
                     response.setMessage(ex.getMessage());

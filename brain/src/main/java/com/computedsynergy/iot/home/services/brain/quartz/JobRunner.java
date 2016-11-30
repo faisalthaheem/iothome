@@ -47,6 +47,16 @@ public class JobRunner  implements Job{
             mqttClient.connect(connOpts);
             logger.log(Level.INFO, "Connected...");
             
+            int retries = 5;
+            while(!mqttClient.isConnected()){
+                Thread.sleep(500);
+                if(--retries == 0) {
+                    logger.log(Level.SEVERE, "Could not connect, will not be executing job: ", job.getJobName());
+                    return;
+                }
+                logger.log(Level.INFO, "Awaiting connection to broker. Will retry [" + retries + "] more times.");
+            }
+            
             try{
 
                 String payload = job.getPayload();
@@ -59,7 +69,9 @@ public class JobRunner  implements Job{
                 logger.log(Level.SEVERE, "execute", ex);
             }
             
-            mqttClient.disconnect();
+            if(mqttClient.isConnected()){
+                mqttClient.disconnect();
+            }
             logger.log(Level.INFO, "Disconnected from broker");
             
             logger.log(Level.INFO, "End executing job.");

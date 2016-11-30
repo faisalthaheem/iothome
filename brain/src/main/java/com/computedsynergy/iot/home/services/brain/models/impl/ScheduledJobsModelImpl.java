@@ -86,6 +86,37 @@ public class ScheduledJobsModelImpl implements ScheduledJobsModel {
         
         return job;
     }
+
+    @Override
+    public boolean updateSchedule(ScheduledJob job) {
+
+        String sql = "REPLACE INTO JOBSSCHEMA.scheduledjobs(id, jobName, jobidentifier, cronSchedule, topic, payload) " +
+                "VALUES(:id, :jobName,:jobidentifier,:cronSchedule,:topic,:payload)";
+        
+        boolean bRet = true;
+        
+        try(Connection con = DbUtil.getDBConnection().open()){
+            
+            try{
+                    con.createQuery(sql)
+                        .addParameter("id", job.getId())
+                        .addParameter("jobName", job.getJobName())
+                        .addParameter("jobidentifier", job.getJobidentifier())
+                        .addParameter("cronSchedule", job.getCronSchedule())
+                        .addParameter("topic", job.getTopic())
+                        .addParameter("payload", job.getPayload())
+                        .executeUpdate().getKey(Integer.class);
+
+                System.out.println("Record updated successfully. " + job.getId());
+                
+            }catch(Exception ex){
+                logger.log(Level.SEVERE, "addScheduledJob", ex);
+                bRet = false;
+            }
+        }
+        
+        return bRet;
+    }
     
     
 }

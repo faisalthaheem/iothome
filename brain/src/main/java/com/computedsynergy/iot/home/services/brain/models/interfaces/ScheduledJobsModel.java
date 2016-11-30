@@ -13,6 +13,7 @@ public interface ScheduledJobsModel {
 
     int addScheduledJob(ScheduledJob job);
     boolean deleteScheduledJob(ScheduledJob job);
+    boolean updateSchedule(ScheduledJob job);
     List<ScheduledJob> listJobs();
     ScheduledJob getJob(int jobId);
 }
