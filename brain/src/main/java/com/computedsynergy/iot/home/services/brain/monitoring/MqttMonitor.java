@@ -1,7 +1,9 @@
-package com.computedsynergy.iot.home.services.brain.power;
+package com.computedsynergy.iot.home.services.brain.monitoring;
 
 import com.computedsynergy.iot.home.services.brain.Brain;
+import com.computedsynergy.iot.home.services.brain.models.impl.MqttMonitorModelImpl;
 import com.computedsynergy.iot.home.services.brain.models.impl.PowerMonModelImpl;
+import com.computedsynergy.iot.home.services.brain.models.pojos.MqttMon;
 import com.computedsynergy.iot.home.services.brain.models.pojos.PowerMon;
 import com.computedsynergy.iot.home.services.brain.pojo.CommandLineOptions;
 import java.nio.ByteBuffer;
@@ -19,9 +21,9 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
  *
  * @author Faisal Thaheem
  */
-public class PowerConsumptionMonitor implements Runnable, MqttCallback {
+public class MqttMonitor implements Runnable, MqttCallback {
 
-    private static final Logger logger = Logger.getLogger(PowerConsumptionMonitor.class.getName());
+    private static final Logger logger = Logger.getLogger(MqttMonitor.class.getName());
     final static MemoryPersistence persistence = new MemoryPersistence();
 
     @Override
@@ -43,10 +45,10 @@ public class PowerConsumptionMonitor implements Runnable, MqttCallback {
 
             try {
 
-                mqttClient.subscribe("fromPowerMon");
+                mqttClient.subscribe("#");
 
                 while (true) {
-                    Thread.sleep(100);
+                    Thread.sleep(1000);
                 }
 
             } catch (Exception ex) {
@@ -67,14 +69,24 @@ public class PowerConsumptionMonitor implements Runnable, MqttCallback {
     }
 
     @Override
-    public void messageArrived(String string, MqttMessage mm) throws Exception {
-        logger.log(Level.INFO, "MessageArrived {0} = {1}", new Object[]{string, new String(mm.getPayload())});
+    public void messageArrived(String topic, MqttMessage mm) throws Exception {
+        logger.log(Level.INFO, "MessageArrived {0} = {1}", new Object[]{topic, new String(mm.getPayload())});
+        
+        if(topic.equalsIgnoreCase("fromPowerMon")){
 
-        PowerMon reading = new PowerMon();
-        reading.setReadat(new Date());
-        reading.setReading(ByteBuffer.wrap(mm.getPayload()).getDouble());
-        PowerMonModelImpl powerMonModel = new PowerMonModelImpl();
-        powerMonModel.addPowerMonReading(reading);
+            PowerMon reading = new PowerMon();
+            reading.setReadat(new Date());
+            reading.setReading(ByteBuffer.wrap(mm.getPayload()).getDouble());
+            PowerMonModelImpl powerMonModel = new PowerMonModelImpl();
+            powerMonModel.addPowerMonReading(reading);
+        }else{
+            MqttMon mon = new MqttMon();
+            mon.setTopicname(topic);
+            mon.setPayload(new String(mm.getPayload()));
+            mon.setCreated(new Date());
+            MqttMonitorModelImpl monModel = new MqttMonitorModelImpl();
+            monModel.addEntry(mon);
+        }
     }
 
     @Override

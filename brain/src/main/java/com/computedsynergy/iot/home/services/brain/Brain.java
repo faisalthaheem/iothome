@@ -5,7 +5,7 @@ import com.computedsynergy.iot.home.services.brain.models.impl.ScheduledJobsMode
 import com.computedsynergy.iot.home.services.brain.pojo.ResponsePojo;
 import com.computedsynergy.iot.home.services.brain.models.pojos.ScheduledJob;
 import com.computedsynergy.iot.home.services.brain.pojo.CommandLineOptions;
-import com.computedsynergy.iot.home.services.brain.power.PowerConsumptionMonitor;
+import com.computedsynergy.iot.home.services.brain.monitoring.MqttMonitor;
 import com.computedsynergy.iot.home.services.brain.quartz.JobRunner;
 import com.computedsynergy.iot.home.services.brain.transformers.JsonTransformer;
 import com.google.gson.Gson;
@@ -116,7 +116,7 @@ public class Brain {
         new JCommander(getCommandLineOptions(), args);
         
         startSavedJobs();
-        new Thread(new PowerConsumptionMonitor()).start();
+        new Thread(new MqttMonitor()).start();
         
         get("/listJobs", (req, res) -> {
             
