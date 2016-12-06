@@ -1,7 +1,9 @@
 package com.computedsynergy.iot.home.services.brain;
 
 import com.beust.jcommander.JCommander;
+import com.computedsynergy.iot.home.services.brain.models.impl.MqttMonitorModelImpl;
 import com.computedsynergy.iot.home.services.brain.models.impl.ScheduledJobsModelImpl;
+import com.computedsynergy.iot.home.services.brain.models.pojos.MqttMon;
 import com.computedsynergy.iot.home.services.brain.pojo.ResponsePojo;
 import com.computedsynergy.iot.home.services.brain.models.pojos.ScheduledJob;
 import com.computedsynergy.iot.home.services.brain.pojo.CommandLineOptions;
@@ -12,6 +14,9 @@ import com.google.gson.Gson;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 import org.quartz.CronScheduleBuilder;
 import org.quartz.JobBuilder;
 import org.quartz.JobDetail;
@@ -230,6 +235,23 @@ public class Brain {
             }
         
             return response;
+            
+        }, new JsonTransformer());
+        
+        get("/listMqttMonEntriesForDate", (req, res) -> {
+            
+            MqttMonitorModelImpl model = new MqttMonitorModelImpl();
+            try{
+            DateTimeFormatter fmt = DateTimeFormat.forPattern("yyyy-M-d");
+            DateTime dated = fmt.parseDateTime(req.queryParams("dated"));
+            List<MqttMon> entries = model.listEntriesForDate(dated);
+            return new ResponsePojo("entries", entries);
+            
+            }catch(Exception ex){
+                System.out.println(ex.getMessage());
+            }
+            
+            return "";
             
         }, new JsonTransformer());
     }

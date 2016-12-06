@@ -1,8 +1,8 @@
 package com.computedsynergy.iot.home.services.brain.models.interfaces;
 
 import com.computedsynergy.iot.home.services.brain.models.pojos.MqttMon;
-import java.util.Date;
 import java.util.List;
+import org.joda.time.DateTime;
 
 
 /**
@@ -13,5 +13,5 @@ import java.util.List;
 public interface MqttMonitorModel {
 
     int addEntry(MqttMon mon);
-    List<MqttMon> listEntriesForDate(Date dated);
+    List<MqttMon> listEntriesForDate(DateTime dated);
 }

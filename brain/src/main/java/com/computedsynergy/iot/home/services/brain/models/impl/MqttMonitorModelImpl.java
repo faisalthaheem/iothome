@@ -7,6 +7,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.joda.time.DateTime;
 import org.sql2o.Connection;
 
 /**
@@ -44,8 +45,29 @@ public class MqttMonitorModelImpl implements MqttMonitorModel {
     }
 
     @Override
-    public List<MqttMon> listEntriesForDate(Date dated) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    public List<MqttMon> listEntriesForDate(DateTime dated) {
+        
+        List<MqttMon> retEntries;
+        
+        String from = String.format("%1$d-%2$d-%3$d 00:00:00", dated.getYear(), dated.getMonthOfYear(), dated.getDayOfMonth());
+        String to = String.format("%1$d-%2$d-%3$d 23:59:59", dated.getYear(), dated.getMonthOfYear(), dated.getDayOfMonth());
+        
+        
+        String sql = "select id, topicname, payload, created " +
+                "FROM JOBSSCHEMA.mqttmon " +
+                "WHERE created >= :fromDate AND created <= :toDate " +
+                "order by id desc";
+        
+        
+        try(Connection con = DbUtil.getDBConnection().open()){
+            retEntries = con.createQuery(sql)
+                    .addParameter("fromDate", from)
+                    .addParameter("toDate", to)
+                    .executeAndFetch(MqttMon.class);
+        }
+        
+        return retEntries;
+        
     }
 
     

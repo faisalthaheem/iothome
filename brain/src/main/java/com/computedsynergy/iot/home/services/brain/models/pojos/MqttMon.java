@@ -5,7 +5,7 @@
  */
 package com.computedsynergy.iot.home.services.brain.models.pojos;
 
-import java.util.Date;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -17,7 +17,7 @@ public class MqttMon {
     private int id;
     private String topicname;
     private String payload;
-    private Date created;
+    private DateTime created;
 
     /**
      * @return the id
@@ -64,14 +64,14 @@ public class MqttMon {
     /**
      * @return the created
      */
-    public Date getCreated() {
+    public DateTime getCreated() {
         return created;
     }
 
     /**
      * @param created the created to set
      */
-    public void setCreated(Date created) {
+    public void setCreated(DateTime created) {
         this.created = created;
     }
     

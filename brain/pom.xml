@@ -41,6 +41,16 @@
             <artifactId>h2</artifactId>
             <version>1.4.192</version>
         </dependency>
+        <dependency>
+            <groupId>joda-time</groupId>
+            <artifactId>joda-time</artifactId>
+            <version>2.9.6</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fatboyindustrial.gson-jodatime-serialisers</groupId>
+            <artifactId>gson-jodatime-serialisers</artifactId>
+            <version>1.4.0</version>
+        </dependency>
     </dependencies>
     
     <build>

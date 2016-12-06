@@ -8,6 +8,7 @@ import com.computedsynergy.iot.home.services.brain.models.pojos.PowerMon;
 import com.computedsynergy.iot.home.services.brain.pojo.CommandLineOptions;
 import java.nio.ByteBuffer;
 import java.util.Date;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -16,6 +17,7 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttConnectOptions;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import org.joda.time.DateTime;
 
 /**
  *
@@ -31,12 +33,14 @@ public class MqttMonitor implements Runnable, MqttCallback {
 
         try {
             CommandLineOptions options = Brain.getCommandLineOptions();
+            String clientUuid = UUID.randomUUID().toString();
 
-            MqttClient mqttClient = new MqttClient(options.getMqBroker(), options.getClientId(), persistence);
+            MqttClient mqttClient = new MqttClient(options.getMqBroker(), clientUuid, persistence);
             MqttConnectOptions connOpts = new MqttConnectOptions();
             connOpts.setKeepAliveInterval(30);
             connOpts.setAutomaticReconnect(true);
-            connOpts.setCleanSession(true);
+            connOpts.setCleanSession(false);
+            
             mqttClient.setCallback(this);
 
             logger.log(Level.INFO, "Connecting to broker: " + options.getMqBroker());
@@ -83,7 +87,7 @@ public class MqttMonitor implements Runnable, MqttCallback {
             MqttMon mon = new MqttMon();
             mon.setTopicname(topic);
             mon.setPayload(new String(mm.getPayload()));
-            mon.setCreated(new Date());
+            mon.setCreated(new DateTime());
             MqttMonitorModelImpl monModel = new MqttMonitorModelImpl();
             monModel.addEntry(mon);
         }
